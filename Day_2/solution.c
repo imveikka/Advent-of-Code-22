@@ -1,4 +1,4 @@
-/*  Advent of Code: Day 2, Problem 1:
+/*  Advent of Code: Day 2:
     Calculate total score of RPS-event
 
     Author: Veikka Immonen */

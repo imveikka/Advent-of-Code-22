@@ -11,7 +11,7 @@
 #include <string.h>
 
 
-#define N 1 <<27
+#define N 1 << 27
 
 /*  Check if any duplicates occurs in string
     lenght of n. Returns 1 if yes, 0 if no. */

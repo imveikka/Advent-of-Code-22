@@ -11,6 +11,8 @@
 #include <string.h>
 
 
+#define N 1 <<27
+
 /*  Check if any duplicates occurs in string
     lenght of n. Returns 1 if yes, 0 if no. */
 int strndub(char *str, int n) {
@@ -30,40 +32,34 @@ int main(int argc, char *argv[]) {
         return 0;
     }
 
+    char *foo = calloc(N, 1);
+    int S = 4, G = 14;
+
     FILE * file;
     if ((file = fopen(argv[1], "r")) == NULL) {
         printf("File not found\n");
         return 0;
     }
-
-    char foo[5];
-    char bar[15];
-    int result1 = 4, result2 = 14;
-
-    /* Solution 1 */
-    fscanf(file, "%4s", foo);
-    while (foo[3]) {
-        if (strndub(foo, 4) == 0) break;
-        fseek(file, -3, SEEK_CUR);
-        fscanf(file, "%4s", foo);
-        result1++;
-    }
-
-    printf("Silver %d\n", result1);
-
-    /* Solution 2 */
-    fseek(file, 0, SEEK_SET);
-    fscanf(file, "%14s", bar);
-    while (bar[13]) {
-        if (strndub(bar, 14) == 0) break;
-        fseek(file, -13, SEEK_CUR);
-        fscanf(file, "%14s", bar);
-        result2++;
-    }
-
-    printf("Gold %d\n", result2);
-
+    fscanf(file, "%s", foo);
     fclose(file);
 
+    /* Solution 1 */
+    for (int i = 0; foo[i]; ++i) {
+        if (strndub(foo+i, S) == 0) {
+            printf("Silver: %d\n", i + S);
+            break;
+        }
+    }
+
+    /* Solution 2 */
+    for (int i = 0; foo[i]; ++i) {
+        if (strndub(foo+i, G) == 0) {
+            printf("Gold: %d\n", i + G);
+            break;
+        }
+    }
+    
+    free(foo);
+    
     return 0;
 }

@@ -11,12 +11,12 @@
 #include <string.h>
 
 
-#define N 16
+#define N 32
 
 
 typedef struct file {
     char name[N];
-    int size;
+    long size;
 } file;
 
 
@@ -25,20 +25,20 @@ typedef struct dir {
     struct dir *host;
     struct dir *dirs[N];
     struct file files[N];
-    int n_dirs;
-    int n_files;
+    long n_dirs;
+    long n_files;
 } dir;
 
 
 dir *new_dir(char *, dir *);
 size_t ls(FILE *, char *, size_t *, dir *);
 dir *cd(dir *, char *);
-int traverse_s(dir *, int, int *);
-int traverse_g(dir *, int *, int);
+long traverse_s(dir *, long, long *);
+long traverse_g(dir *, long *, long);
 void free_system(dir *);
 
 
-int main(int argc, char *argv[]) {
+long main(long argc, char *argv[]) {
 
     if (argc < 2) {
         printf("Give filename\n");
@@ -75,16 +75,20 @@ int main(int argc, char *argv[]) {
 
     /* Get solutions */
 
-    int silver = 0;
-    int total = traverse_s(root, 0, &silver);
-    int gold = total;
-    int needed = 30000000 - (70000000 - total);
+    long silver = 0;
+    long total = traverse_s(root, 0, &silver);
+    long gold = total;
+    long needed = 30000000 - (70000000 - total);
 
-    traverse_g(root, &gold, needed);
+    /* Replace needed for bigboy test */
+    long bigboy = 700000000 - (3000000000  - total);
+                            
+                          /* here */
+    traverse_g(root, &gold, bigboy);
 
-    printf("Total: %d\n", total);
-    printf("Silver: %d\n", silver);
-    printf("Gold: %d\n", gold);
+    printf("Total: %ld\n", total);
+    printf("Silver: %ld\n", silver);
+    printf("Gold: %ld\n", gold);
 
     /* I hope this will do */
     free_system(root);
@@ -136,7 +140,7 @@ dir *cd(dir *host, char *line) {
 
     if (strcmp(arg, "..") == 0) return host->host;
     
-    for (int i = 0; i < host->n_dirs; ++i) {
+    for (long i = 0; i < host->n_dirs; ++i) {
         if (strcmp(arg, host->dirs[i]->name) == 0) return host->dirs[i];
     }
 
@@ -145,20 +149,20 @@ dir *cd(dir *host, char *line) {
 
 
 /* Solution 1 */
-int traverse_s(dir *host, int depth, int *silver) {
-    int sum = 0;
-    for (int i = 0; i < host->n_files; ++i) sum += host->files[i].size;
-    for (int i = 0; i < host->n_dirs; ++i) sum += traverse_s(host->dirs[i], depth + 1, silver);
+long traverse_s(dir *host, long depth, long *silver) {
+    long sum = 0;
+    for (long i = 0; i < host->n_files; ++i) sum += host->files[i].size;
+    for (long i = 0; i < host->n_dirs; ++i) sum += traverse_s(host->dirs[i], depth + 1, silver);
     if (sum <= 100000) *silver += sum;
     return sum;
 }
 
 
 /* Solution 2 */
-int traverse_g(dir *host, int *gold, int needed) {
-    int new = 0;
-    for (int i = 0; i < host->n_files; ++i) new += host->files[i].size;
-    for (int i = 0; i < host->n_dirs; ++i) new += traverse_g(host->dirs[i], gold, needed);
+long traverse_g(dir *host, long *gold, long needed) {
+    long new = 0;
+    for (long i = 0; i < host->n_files; ++i) new += host->files[i].size;
+    for (long i = 0; i < host->n_dirs; ++i) new += traverse_g(host->dirs[i], gold, needed);
     *gold = (new > needed && new < *gold) ? new: *gold;
     return new;
 }
@@ -166,6 +170,6 @@ int traverse_g(dir *host, int *gold, int needed) {
 
 /* Prevents most memory leaks */
 void free_system(dir *host) {
-    for (int i = 0; i < host->n_dirs; ++i) free_system(host->dirs[i]);
+    for (long i = 0; i < host->n_dirs; ++i) free_system(host->dirs[i]);
     free(host);
 }

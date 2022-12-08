@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
             gold_candidate = 1;
 
             /*  Get max tree from each side of tree ij
-                and evaluate its distance*/
+                and evaluate its distance */
 
             dist = 0;
             for (int k = j - 1; k >= 0; --k)

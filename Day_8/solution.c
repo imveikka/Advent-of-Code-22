@@ -12,7 +12,7 @@
 #include <string.h>
 
 
-#define N 1 << 10
+#define N 1 << 14
 #define MAX(a, b) (a) > (b) ? (a) : (b)
 
 

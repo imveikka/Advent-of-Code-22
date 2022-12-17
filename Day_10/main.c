@@ -1,4 +1,4 @@
-/*  Advent of Code: Day 8:
+/*  Advent of Code: Day 10:
     Cathode-Ray Tube
 
     Compiling is less painful if file name is not so long...
